@@ -15,21 +15,18 @@
  */
 define([
   "module",
-  "./simple",
   "../i18n!types"
-], function(module, simpleFactory, bundle) {
+], function(module, bundle) {
 
   "use strict";
 
-  return function(context) {
-
-    var Simple = context.get(simpleFactory);
+  return ["simple", function(Simple) {
 
     /**
      * @name pentaho.type.Boolean
      * @class
      * @extends pentaho.type.Simple
-     * @amd {pentaho.type.Factory<pentaho.type.Boolean>} pentaho/type/boolean
+     * @amd {pentaho.type.spec.UTypeModule<pentaho.type.Boolean>} pentaho/type/boolean
      *
      * @classDesc The class of boolean values.
      *
@@ -43,15 +40,15 @@ define([
        * @readonly
        */
 
-      type: /** @lends pentaho.type.Boolean.Type# */{
+      $type: /** @lends pentaho.type.Boolean.Type# */{
         id: module.id,
         alias: "boolean",
         cast: Boolean
       }
     }).implement(/** @lends pentaho.type.Boolean# */{
-      type: bundle.structured["boolean"] // eslint-disable-line dot-notation
+      $type: bundle.structured["boolean"] // eslint-disable-line dot-notation
     });
 
     return PenBoolean;
-  };
+  }];
 });

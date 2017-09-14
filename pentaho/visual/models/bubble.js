@@ -15,38 +15,37 @@
  */
 define([
   "module",
-  "./metricDotAbstract",
-  "pentaho/i18n!./i18n/model",
-  "./mixins/scaleSizeContinuousType"
-], function(module, baseModelFactory, bundle, scaleSizeContinuousType) {
+  "pentaho/i18n!./i18n/model"
+], function(module, bundle) {
 
   "use strict";
 
-  return function(context) {
+  return [
+    "./metricPointAbstract",
+    "./mixins/scaleSizeContinuous",
+    function(BaseModel, ScaleSizeContinuousModel) {
 
-    var BaseModel = context.get(baseModelFactory);
+      return BaseModel.extend({
+        $type: {
+          id: module.id,
+          mixins: [ScaleSizeContinuousModel],
 
-    return BaseModel.extend({
-      type: {
-        id: module.id,
-        v2Id: "ccc_scatter",
-        defaultView: "pentaho/ccc/visual/bubble",
+          v2Id: "ccc_scatter",
+          defaultView: "pentaho/ccc/visual/bubble",
 
-        props: [
-          {
-            name: "size", // VISUAL_ROLE
-            type: {
-              base: "pentaho/visual/role/quantitative",
+          props: [
+            {
+              name: "size", // VISUAL_ROLE
+              base: "pentaho/visual/role/property",
+              levels: ["quantitative"],
               dataType: "number",
-              props: {attributes: {countMax: 1}}
-            },
-            ordinal: 7
-          }
-        ]
-      }
-    })
-    .implement({type: scaleSizeContinuousType})
-    .implement({type: bundle.structured.scaleSizeContinuous})
-    .implement({type: bundle.structured.bubble});
-  };
+              attributes: {countMax: 1},
+              ordinal: 7
+            }
+          ]
+        }
+      })
+      .implement({$type: bundle.structured.bubble});
+    }
+  ];
 });

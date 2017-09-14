@@ -15,33 +15,30 @@
  */
 define([
   "module",
-  "./simple",
   "../util/object",
   "../i18n!types"
-], function(module, simpleFactory, O, bundle) {
+], function(module, O, bundle) {
 
   "use strict";
 
-  var _simpleObjectNextUid = 1;
-  var _OID_PROP = "__pentaho_type_ouid_" + Math.random().toString(32) + "__";
-  var _DEF_OID_PROP = {
+  var __simpleObjectNextUid = 1;
+  var __OID_PROP = "__pentaho_type_ouid_" + Math.random().toString(32) + "__";
+  var __DEF_OID_PROP = {
     value: "",
     configurable: true,
     writable:     true,
     enumerable:   false
   };
 
-  return function(context) {
-
-    var Simple = context.get(simpleFactory);
+  return ["simple", function(Simple) {
 
     /**
      * @name pentaho.type.Object
      * @class
      * @extends pentaho.type.Simple
-     * @amd {pentaho.type.Factory<pentaho.type.Object>} pentaho/type/object
+     * @amd {pentaho.type.spec.UTypeModule<pentaho.type.Object>} pentaho/type/object
      *
-     * @classDesc A primitive JavaScript object type.
+     * @classDesc The class that represents primitive, JavaScript {@link object} values.
      *
      * @description Creates an object instance.
      */
@@ -53,15 +50,15 @@ define([
 
         // Reuse an existing UID mark, so that two Simple instances with the same underlying primitive value
         // are considered #equal.
-        var uid = O.getOwn(this._value, _OID_PROP);
+        var uid = O.getOwn(this.value, __OID_PROP);
         if(uid == null) {
           // Mark value with a non-enumerable property.
           // Note that non-enumerable properties are not included by JSON.stringify.
-          _DEF_OID_PROP.value = uid = String(_simpleObjectNextUid++);
-          Object.defineProperty(this._value, _OID_PROP, _DEF_OID_PROP);
+          __DEF_OID_PROP.value = uid = String(__simpleObjectNextUid++);
+          Object.defineProperty(this.value, __OID_PROP, __DEF_OID_PROP);
         }
 
-        this._uid = uid;
+        this.__uid = uid;
       },
 
       /**
@@ -72,8 +69,8 @@ define([
        * @type {string}
        * @readonly
        */
-      get key() {
-        return this._uid;
+      get $key() {
+        return this.__uid;
       },
 
       /**
@@ -83,15 +80,15 @@ define([
        * @readonly
        */
 
-      type: /** @lends pentaho.type.Object.Type# */{
+      $type: /** @lends pentaho.type.Object.Type# */{
         id:   module.id,
         alias: "object",
         cast: Object
       }
     }).implement(/** @lends pentaho.type.Object# */{
-      type: bundle.structured["object"] // eslint-disable-line dot-notation
+      $type: bundle.structured["object"] // eslint-disable-line dot-notation
     });
 
     return PenObject;
-  };
+  }];
 });

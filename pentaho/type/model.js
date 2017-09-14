@@ -15,15 +15,12 @@
  */
 define([
   "module",
-  "./complex",
   "../i18n!types"
-], function(module, complexFactory, bundle) {
+], function(module, bundle) {
 
   "use strict";
 
-  return function(context) {
-
-    var Complex = context.get(complexFactory);
+  return ["complex", "application", function(Complex, Application) {
 
     /**
      * @name pentaho.type.Model.Type
@@ -40,9 +37,11 @@ define([
      * @class
      * @extends pentaho.type.Complex
      *
-     * @amd {pentaho.type.Factory<pentaho.type.Model>} pentaho/type/model
+     * @amd {pentaho.type.spec.UTypeModule<pentaho.type.Model>} pentaho/type/model
      *
-     * @classDesc The base class of model types.
+     * @classDesc The base class of model values.
+     *
+     * Models are complex values that have an [application]{@link pentaho.type.Model#application} property.
      *
      * @description Creates a model instance.
      *
@@ -67,7 +66,7 @@ define([
       },
       // endregion
 
-      type: /** @lends pentaho.type.Model.Type# */{
+      $type: /** @lends pentaho.type.Model.Type# */{
         id: module.id,
         alias: "model",
 
@@ -88,15 +87,15 @@ define([
            */
           {
             name: "application",
-            type: "pentaho/type/application"
+            valueType: Application
           }
         ]
       }
     })
     .implement({
-      type: bundle.structured.model
+      $type: bundle.structured.model
     });
 
     return Model;
-  };
+  }];
 });

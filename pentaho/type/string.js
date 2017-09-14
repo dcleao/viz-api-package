@@ -15,23 +15,20 @@
  */
 define([
   "module",
-  "./simple",
   "../i18n!types"
-], function(module, simpleFactory, bundle) {
+], function(module, bundle) {
 
   "use strict";
 
-  return function(context) {
-
-    var Simple = context.get(simpleFactory);
+  return ["simple", function(Simple) {
 
     /**
      * @name pentaho.type.String
      * @class
      * @extends pentaho.type.Simple
-     * @amd {pentaho.type.Factory<pentaho.type.String>} pentaho/type/string
+     * @amd {pentaho.type.spec.UTypeModule<pentaho.type.String>} pentaho/type/string
      *
-     * @classDesc A textual type.
+     * @classDesc The class of textual values.
      *
      * @description Creates a string instance.
      */
@@ -43,15 +40,15 @@ define([
        * @readonly
        */
 
-      type: {
+      $type: {
         id: module.id,
         alias: "string",
         cast: String
       }
     }).implement({
-      type: bundle.structured["string"] // eslint-disable-line dot-notation
+      $type: bundle.structured["string"] // eslint-disable-line dot-notation
     });
 
     return PenString;
-  };
+  }];
 });

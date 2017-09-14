@@ -15,90 +15,81 @@
  */
 define([
   "module",
-  "./cartesianAbstract",
-  "pentaho/i18n!./i18n/model",
-  "./types/shape",
-  "./types/labelsOption",
-  "./mixins/scaleSizeContinuousType",
-  "./mixins/scaleColorContinuousType"
-], function(module, baseModelFactory, bundle, shapeFactory, labelsOptionFactory,
-    scaleSizeContinuousType, scaleColorContinuousType) {
+  "pentaho/i18n!./i18n/model"
+], function(module, bundle) {
 
   "use strict";
 
-  function requiredOneMeasure() {
-    /* jshint validthis:true*/
-    return !this.model.size.attributes.count && !this.model.color.attributes.count;
-  }
+  return [
+    "./cartesianAbstract",
+    "./types/shape",
+    "./types/labelsOption",
+    "./mixins/scaleSizeContinuous",
+    "./mixins/scaleColorContinuous",
+    function(BaseModel, Shape, LabelsOption, ScaleSizeContinuousModel, ScaleColorContinuousModel) {
 
-  return function(context) {
+      return BaseModel.extend({
+        $type: {
+          id: module.id,
+          mixins: [ScaleSizeContinuousModel, ScaleColorContinuousModel],
 
-    var BaseModel = context.get(baseModelFactory);
+          v2Id: "ccc_heatgrid",
+          category: "heatgrid",
+          defaultView: "pentaho/ccc/visual/heatGrid",
 
-    return BaseModel.extend({
-      type: {
-        id: module.id,
-        v2Id: "ccc_heatgrid",
-        category: "heatgrid",
-        defaultView: "pentaho/ccc/visual/heatGrid",
-
-        props: [
-          {
-            name: "rows", // VISUAL_ROLE
-            type: {
+          props: [
+            {
+              name: "rows", // VISUAL_ROLE
+              base: "pentaho/visual/role/property",
               levels: ["ordinal"],
-              props: {attributes: {isRequired: true}}
+              attributes: {isRequired: true},
+              ordinal: 5
             },
-            ordinal: 5
-          },
-          {
-            name: "columns", // VISUAL_ROLE
-            type: "pentaho/visual/role/ordinal",
-            ordinal: 6
-          },
-          {
-            name: "color", // VISUAL_ROLE
-            type: {
-              base: "pentaho/visual/role/quantitative",
+            {
+              name: "columns", // VISUAL_ROLE
+              base: "pentaho/visual/role/property",
+              levels: ["ordinal"],
+              ordinal: 6
+            },
+            {
+              name: "color", // VISUAL_ROLE
+              base: "pentaho/visual/role/property",
+              levels: ["quantitative"],
               dataType: "number",
-              props: {attributes: {countMax: 1, isRequired: requiredOneMeasure}}
+              attributes: {isRequired: __requiredOneMeasure, countMax: 1},
+              ordinal: 7
             },
-            ordinal: 7
-          },
-          {
-            name: "size", // VISUAL_ROLE
-            type: {
-              base: "pentaho/visual/role/quantitative",
+            {
+              name: "size", // VISUAL_ROLE
+              base: "pentaho/visual/role/property",
+              levels: ["quantitative"],
               dataType: "number",
-              props: {attributes: {countMax: 1, isRequired: requiredOneMeasure}}
+              attributes: {isRequired: __requiredOneMeasure, countMax: 1},
+              ordinal: 8
             },
-            ordinal: 8
-          },
-          {
-            name: "labelsOption",
-            type: {
-              base: labelsOptionFactory,
-              domain: ["none", "center"]
+            {
+              name: "labelsOption",
+              valueType: LabelsOption,
+              domain: ["none", "center"],
+              isRequired: true,
+              defaultValue: "none"
             },
-            isRequired: true,
-            value: "none"
-          },
-          {
-            name: "shape",
-            type: {
-              base: shapeFactory,
-              domain: ["none", "circle", "square"]
-            },
-            isRequired: true,
-            value: "square"
-          }
-        ]
-      }
-    })
-    .implement({type: scaleSizeContinuousType})
-    .implement({type: bundle.structured.scaleSizeContinuous})
-    .implement({type: scaleColorContinuousType})
-    .implement({type: bundle.structured.scaleColorContinuous})
-    .implement({type: bundle.structured.heatGrid});
-  };
+            {
+              name: "shape",
+              valueType: Shape,
+              domain: ["none", "circle", "square"],
+              isRequired: true,
+              defaultValue: "square"
+            }
+          ]
+        }
+      })
+      .implement({$type: bundle.structured.heatGrid});
+    }
+  ];
+
+  function __requiredOneMeasure() {
+    /* jshint validthis:true*/
+    return !this.size.attributes.count && !this.color.attributes.count;
+  }
 });

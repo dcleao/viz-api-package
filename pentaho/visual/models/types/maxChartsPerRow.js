@@ -20,18 +20,15 @@ define([
 
   "use strict";
 
-  return function(context) {
+  return ["number", function(PentahoNumber) {
 
-    var Refinement = context.get("pentaho/type/refinement");
-
-    return Refinement.extend({
-      type: {
+    return PentahoNumber.extend({
+      $type: {
         id: module.id,
-        of: "number",
-        facets: ["DiscreteDomain"],
+        mixins: ["enum"],
         domain: [1, 2, 3, 4, 5]
       }
     })
-    .implement({type: bundle.structured.maxChartsPerRow});
-  };
+    .implement({$type: bundle.structured.maxChartsPerRow});
+  }];
 });

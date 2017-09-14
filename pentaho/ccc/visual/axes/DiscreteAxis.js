@@ -16,42 +16,16 @@
 define([
   "cdf/lib/CCC/def",
   "cdf/lib/CCC/pvc",
-  "./AbstractAxis",
-  "../_util"
-], function(def, pvc, AbstractAxis, util) {
+  "./AbstractAxis"
+], function(def, pvc, AbstractAxis) {
 
   "use strict";
 
   return AbstractAxis.extend({
-    _nonMultiMappingAttrInfoFilter: function(maInfo) {
-      return maInfo.role !== this.chart._multiRole;
-    },
-
-    _isNullMember: function(complex, maInfo) {
-      var atom = complex.atoms[maInfo.cccDimName];
-      return util.isNullMember(atom.value);
-    },
-
-    _buildMappingAttrInfoHtmlTooltip: function(lines, complex, context, maInfo, index) {
-      /*
-       * Multi-chart formulas are not shown in the tooltip
-       * They're on the small chart's title.
-       *
-       * Also, if the chart hides null members,
-       * don't show them in the tooltip.
-       * Using the scene's group, preferably, because the datum (here the complex) may have dimensions
-       * that are null in the groups' own atoms.
-       */
-      if(this._nonMultiMappingAttrInfoFilter(maInfo) &&
-         !(this.chart._hideNullMembers && this._isNullMember(context.scene.group || complex, maInfo))) {
-        this.base.apply(this, arguments);
-      }
-    },
-
     complexToFilter: function(complex) {
       var filter = null;
 
-      var context = this.chart.type.context;
+      var context = this.chart.$type.context;
       var IsEqual;
 
       this.getSelectionMappingAttrInfos().each(function(maInfo) {
@@ -59,9 +33,12 @@ define([
         var value = atom.value == null ? atom.rawValue : atom.value;
 
         if(value != null) {
-          if(!IsEqual) IsEqual = context.get("pentaho/type/filter/isEqual");
+          if(!IsEqual) IsEqual = context.get("=");
 
-          var operand = new IsEqual({property: maInfo.attr.name, value: {_: "string", v: value, f: atom.label}});
+          var attrType = maInfo.attr.type;
+          var valueType = attrType === "number" ? attrType : "string";
+
+          var operand = new IsEqual({property: maInfo.attr.name, value: {_: valueType, v: value, f: atom.label}});
           filter = filter ? filter.and(operand) : operand;
         }
       });

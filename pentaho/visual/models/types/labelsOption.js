@@ -20,16 +20,12 @@ define([
 
   "use strict";
 
-  return function(context) {
+  return ["string", function(PentahoString) {
 
-    var Refinement = context.get("pentaho/type/refinement");
-
-    return Refinement.extend({
-
-      type: {
+    return PentahoString.extend({
+      $type: {
         id: module.id,
-        of: "string",
-        facets: ["DiscreteDomain"],
+        mixins: ["enum"],
         domain: [
           "none", "center",                 // all (HeatGrid, Sunburst)
           "insideEnd", "insideBase",        // StackedBar, NormalizedBar (vertical and horizontal)
@@ -40,6 +36,6 @@ define([
         ]
       }
     })
-    .implement({type: bundle.structured.labelsOption});
-  };
+    .implement({$type: bundle.structured.labelsOption});
+  }];
 });

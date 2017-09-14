@@ -15,23 +15,18 @@
  */
 define([
   "module",
-  "./complex",
   "../i18n!types"
-], function(module, complexFactory, bundle) {
+], function(module, bundle) {
 
   "use strict";
 
-  return function(context) {
-
-    var Complex = context.get(complexFactory);
-
+  return ["complex", function(Complex) {
     /**
      * @name pentaho.type.Application.Type
      * @class
      * @extends pentaho.type.Complex.Type
      *
      * @classDesc The base type class of application types.
-     *
      * For more information see {@link pentaho.type.Application}.
      */
 
@@ -40,7 +35,7 @@ define([
      * @class
      * @extends pentaho.type.Complex
      *
-     * @amd {pentaho.type.Factory<pentaho.type.Application>} pentaho/type/application
+     * @amd {pentaho.type.spec.UTypeModule<pentaho.type.Application>} pentaho/type/application
      *
      * @classDesc The base class of application types.
      *
@@ -50,15 +45,15 @@ define([
      * @param {pentaho.type.spec.IApplication} [spec] An application specification.
      */
     var Application = Complex.extend(/** @lends pentaho.type.Application# */{
-      type: /** @lends pentaho.type.Application.Type# */{
+      $type: /** @lends pentaho.type.Application.Type# */{
         id: module.id,
         alias: "application"
       }
     })
     .implement({
-      type: bundle.structured.application
+      $type: bundle.structured.application
     });
 
     return Application;
-  };
+  }];
 });

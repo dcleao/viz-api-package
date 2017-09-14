@@ -15,22 +15,19 @@
  */
 define([
   "module",
-  "./metricDotAbstract",
   "pentaho/i18n!./i18n/model"
-], function(module, baseModelFactory, bundle) {
+], function(module, bundle) {
 
   "use strict";
 
-  return function(context) {
-
-    var BaseModel = context.get(baseModelFactory);
+  return ["./metricPointAbstract", function(BaseModel) {
 
     return BaseModel.extend({
-      type: {
+      $type: {
         id: module.id,
         defaultView: "pentaho/ccc/visual/scatter"
       }
     })
-    .implement({type: bundle.structured.scatter});
-  };
+    .implement({$type: bundle.structured.scatter});
+  }];
 });

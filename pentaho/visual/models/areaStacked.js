@@ -15,24 +15,21 @@
  */
 define([
   "module",
-  "./pointAbstract",
   "pentaho/i18n!./i18n/model"
-], function(module, baseModelFactory, bundle) {
+], function(module, bundle) {
 
   "use strict";
 
-  return function(context) {
-
-    var BaseModel = context.get(baseModelFactory);
+  return ["./pointAbstract", function(BaseModel) {
 
     return BaseModel.extend({
-      type: {
+      $type: {
         id: module.id,
         v2Id: "ccc_area",
         category: "areachart",
         defaultView: "pentaho/ccc/visual/areaStacked"
       }
     })
-    .implement({type: bundle.structured.areaStacked});
-  };
+    .implement({$type: bundle.structured.areaStacked});
+  }];
 });

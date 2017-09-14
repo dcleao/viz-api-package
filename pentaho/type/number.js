@@ -15,23 +15,20 @@
  */
 define([
   "module",
-  "./simple",
   "../i18n!types"
-], function(module, simpleFactory, bundle) {
+], function(module, bundle) {
 
   "use strict";
 
-  return function(context) {
-
-    var Simple = context.get(simpleFactory);
+  return ["simple", function(Simple) {
 
     /**
      * @name pentaho.type.Number
      * @class
      * @extends pentaho.type.Simple
-     * @amd {pentaho.type.Factory<pentaho.type.Number>} pentaho/type/number
+     * @amd {pentaho.type.spec.UTypeModule<pentaho.type.Number>} pentaho/type/number
      *
-     * @classDesc The base class of numeric values.
+     * @classDesc The class of number values.
      *
      * @description Creates a number instance.
      */
@@ -43,20 +40,20 @@ define([
        * @readonly
        */
 
-      type: /** @lends pentaho.type.Number.Type# */{
+      $type: /** @lends pentaho.type.Number.Type# */{
         id: module.id,
         alias: "number",
-        cast: toNumber
+        cast: __toNumber
       }
     }).implement(/** @lends pentaho.type.Number# */{
-      type: bundle.structured["number"] // eslint-disable-line dot-notation
+      $type: bundle.structured["number"] // eslint-disable-line dot-notation
     });
 
     return PenNumber;
 
-    function toNumber(v) {
+    function __toNumber(v) {
       v = +v;
       return isNaN(v) ? null : v;
     }
-  };
+  }];
 });

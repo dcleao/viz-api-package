@@ -15,24 +15,21 @@
  */
 define([
   "module",
-  "./simple",
   "../util/date",
   "../i18n!types"
-], function(module, simpleFactory, date, bundle) {
+], function(module, date, bundle) {
 
   "use strict";
 
-  return function(context) {
-
-    var Simple = context.get(simpleFactory);
+  return ["simple", function(Simple) {
 
     /**
      * @name pentaho.type.Date
      * @class
      * @extends pentaho.type.Simple
-     * @amd {pentaho.type.Factory<pentaho.type.Date>} pentaho/type/date
+     * @amd {pentaho.type.spec.UTypeModule<pentaho.type.Date>} pentaho/type/date
      *
-     * @classDesc The class of a date value.
+     * @classDesc The class of date values.
      *
      * @description Creates a date instance.
      * @constructor
@@ -51,11 +48,11 @@ define([
       _toJSONValue: function(keyArgs) {
         // A string in a format based upon a simplification of the ISO-8601 Extended Format,
         // as defined by [ECMA-262]{@link http://www.ecma-international.org/ecma-262/5.1/#sec-15.9.1.15}.
-        return this._value.toJSON();
+        return this.value.toJSON();
       },
       // endregion
 
-      type: /** @lends pentaho.type.Date.Type# */{
+      $type: /** @lends pentaho.type.Date.Type# */{
         id: module.id,
         alias: "date",
 
@@ -64,9 +61,9 @@ define([
         }
       }
     }).implement(/** @lends pentaho.type.Date# */{
-      type: bundle.structured["date"] // eslint-disable-line dot-notation
+      $type: bundle.structured["date"] // eslint-disable-line dot-notation
     });
 
     return PenDate;
-  };
+  }];
 });

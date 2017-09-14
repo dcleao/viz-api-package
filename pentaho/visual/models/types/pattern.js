@@ -20,19 +20,15 @@ define([
 
   "use strict";
 
-  return function(context) {
+  return ["string", function(PentahoString) {
 
-    var Refinement = context.get("pentaho/type/refinement");
-
-    return Refinement.extend({
-
-      type: {
+    return PentahoString.extend({
+      $type: {
         id: module.id,
-        of: "string",
-        facets: ["DiscreteDomain"],
+        mixins: ["enum"],
         domain: ["gradient", "3_color", "5_color"]
       }
     })
-    .implement({type: bundle.structured.pattern});
-  };
+    .implement({$type: bundle.structured.pattern});
+  }];
 });

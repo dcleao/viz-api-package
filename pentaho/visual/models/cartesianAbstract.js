@@ -15,47 +15,47 @@
  */
 define([
   "module",
-  "./abstract",
-  "pentaho/i18n!./i18n/model",
-  "./types/displayUnits"
-], function(module, baseModelFactory, bundle, displayUnitsFactory) {
+  "pentaho/i18n!./i18n/model"
+], function(module, bundle) {
 
   "use strict";
 
-  return function(context) {
+  return [
+    "./abstract",
+    "./types/displayUnits",
+    function(BaseModel, DisplayUnits) {
 
-    var BaseModel = context.get(baseModelFactory);
+      return BaseModel.extend({
+        $type: {
+          id: module.id,
+          isAbstract: true,
 
-    return BaseModel.extend({
-      type: {
-        id: module.id,
-        isAbstract: true,
+          props: [
+            // Primary axis
+            {name: "autoRange", valueType: "boolean", defaultValue: true},
+            {name: "valueAxisLowerLimit", valueType: "number"},
+            {name: "valueAxisUpperLimit", valueType: "number"},
+            {
+              name: "displayUnits",
+              valueType: DisplayUnits,
+              isRequired: true,
+              defaultValue: "units_0"
+            },
 
-        props: [
-          // Primary axis
-          {name: "autoRange", type: "boolean", value: true},
-          {name: "valueAxisLowerLimit", type: "number"},
-          {name: "valueAxisUpperLimit", type: "number"},
-          {
-            name: "displayUnits",
-            type: displayUnitsFactory,
-            isRequired: true,
-            value: "units_0"
-          },
-
-          // Secondary axis
-          {name: "autoRangeSecondary", type: "boolean", value: true},
-          {name: "valueAxisLowerLimitSecondary", type: "number"},
-          {name: "valueAxisUpperLimitSecondary", type: "number"},
-          {
-            name: "displayUnitsSecondary",
-            type: displayUnitsFactory,
-            isRequired: true,
-            value: "units_0"
-          }
-        ]
-      }
-    })
-    .implement({type: bundle.structured.cartesianAbstract});
-  };
+            // Secondary axis
+            {name: "autoRangeSecondary", valueType: "boolean", defaultValue: true},
+            {name: "valueAxisLowerLimitSecondary", valueType: "number"},
+            {name: "valueAxisUpperLimitSecondary", valueType: "number"},
+            {
+              name: "displayUnitsSecondary",
+              valueType: DisplayUnits,
+              isRequired: true,
+              defaultValue: "units_0"
+            }
+          ]
+        }
+      })
+      .implement({$type: bundle.structured.cartesianAbstract});
+    }
+  ];
 });

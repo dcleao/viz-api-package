@@ -28,7 +28,9 @@ define([
    * @abstract
    *
    * @classDesc The `Change` class is the abstract base class of classes that
-   * describe changes in [structured value instances]{@link pentaho.type.UStructuredValue}.
+   * describe changes in [structured value instances]{@link pentaho.type.UContainer}.
+   *
+   * @description Creates a `Change` instance.
    */
   return Base.extend("pentaho.type.changes.Change", /** @lends pentaho.type.changes.Change# */{
 
@@ -51,7 +53,7 @@ define([
      * @name _apply
      * @memberOf pentaho.type.changes.Change#
      * @method
-     * @param {!pentaho.type.ContainerMixin} target - The container to which changes are applied.
+     * @param {!pentaho.type.mixins.Container} target - The container to which changes are applied.
      * @abstract
      * @protected
      */

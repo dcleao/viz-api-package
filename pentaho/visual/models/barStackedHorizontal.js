@@ -15,44 +15,40 @@
  */
 define([
   "module",
-  "./barAbstract",
-  "pentaho/i18n!./i18n/model",
-  "./types/labelsOption"
-], function(module, baseModelFactory, bundle, labelsOptionFactory) {
+  "pentaho/i18n!./i18n/model"
+], function(module, bundle) {
 
   "use strict";
 
-  return function(context) {
+  return [
+    "./barAbstract",
+    "./types/labelsOption",
+    function(BaseModel, LabelsOption) {
 
-    var BaseModel = context.get(baseModelFactory);
+      return BaseModel.extend({
+        $type: {
+          id: module.id,
+          v2Id: "ccc_horzbarstacked",
+          category: "horzbarchart",
 
-    return BaseModel.extend({
-      type: {
-        id: module.id,
-        v2Id: "ccc_horzbarstacked",
-        category: "horzbarchart",
+          defaultView: "pentaho/ccc/visual/barStackedHorizontal",
 
-        defaultView: "pentaho/ccc/visual/barStackedHorizontal",
-
-        props: [
-          {
-            name: "measures", // VISUAL_ROLE
-            type: {
-              props: {attributes: {isRequired: true}}
-            }
-          },
-          {
-            name: "labelsOption",
-            type: {
-              base: labelsOptionFactory,
-              domain: ["none", "center", "insideEnd", "insideBase"]
+          props: [
+            {
+              name: "measures", // VISUAL_ROLE
+              attributes: {isRequired: true}
             },
-            isRequired: true,
-            value: "none"
-          }
-        ]
-      }
-    })
-    .implement({type: bundle.structured.barStackedHorizontal});
-  };
+            {
+              name: "labelsOption",
+              valueType: LabelsOption,
+              domain: ["none", "center", "insideEnd", "insideBase"],
+              isRequired: true,
+              defaultValue: "none"
+            }
+          ]
+        }
+      })
+      .implement({$type: bundle.structured.barStackedHorizontal});
+    }
+  ];
 });

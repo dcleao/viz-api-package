@@ -25,14 +25,14 @@ define([
   var spec = module.config() || {};
 
   // URL debugLevel has precedence
-  var level = urlDebugLevel();
+  var level = __urlDebugLevel();
   if(level != null) spec.level = level;
 
   /**
    * The `pentaho.debug.manager` singleton provides access to the main debugging manager of
    * the JavaScript Pentaho Platform.
    *
-   * The debugging levels can be configured through AMD like in the following example:
+   * The debugging levels can be configured through AMD as shown in the following example:
    *
    * ```js
    * require.config({
@@ -62,7 +62,7 @@ define([
   return mgr;
 
   // Check URL for "debug" and "debugLevel"
-  function urlDebugLevel() {
+  function __urlDebugLevel() {
     if(domWindow) {
 
       var urlIfHasDebug = function(win) {

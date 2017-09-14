@@ -15,37 +15,34 @@
  */
 define([
   "module",
-  "./simple",
   "../util/object",
   "../util/fun",
   "../util/logger",
   "../i18n!types"
-], function(module, simpleFactory, O, F, logger, bundle) {
+], function(module, O, F, logger, bundle) {
 
   "use strict";
 
-  var NATIVE_CODE = "[native code]";
+  var __NATIVE_CODE = "[native code]";
 
-  var _simpleObjectNextUid = 1;
-  var _OID_PROP = "__pentaho_type_ouid_" + Math.random().toString(32) + "__";
-  var _DEF_OID_PROP = {
+  var __simpleObjectNextUid = 1;
+  var __OID_PROP = "__pentaho_type_ouid_" + Math.random().toString(32) + "__";
+  var __DEF_OID_PROP = {
     value: "",
     configurable: true,
     writable:     true,
     enumerable:   false
   };
 
-  return function(context) {
-
-    var Simple = context.get(simpleFactory);
+  return ["simple", function(Simple) {
 
     /**
      * @name pentaho.type.Function
      * @class
      * @extends pentaho.type.Simple
-     * @amd {pentaho.type.Factory<pentaho.type.Function>} pentaho/type/function
+     * @amd {pentaho.type.spec.UTypeModule<pentaho.type.Function>} pentaho/type/function
      *
-     * @classDesc A primitive JavaScript function type.
+     * @classDesc The class that represents primitive, JavaScript {@link function} values.
      *
      * @description Creates a function instance.
      * @constructor
@@ -65,15 +62,15 @@ define([
 
         // Reuse an existing UID mark, so that two Simple instances with the same underlying primitive value
         // are considered #equal.
-        var uid = O.getOwn(this._value, _OID_PROP);
+        var uid = O.getOwn(this.value, __OID_PROP);
         if(uid == null) {
           // Mark value with a non-enumerable property.
           // Note that non-enumerable properties are not included by JSON.stringify.
-          _DEF_OID_PROP.value = uid = String(_simpleObjectNextUid++);
-          Object.defineProperty(this._value, _OID_PROP, _DEF_OID_PROP);
+          __DEF_OID_PROP.value = uid = String(__simpleObjectNextUid++);
+          Object.defineProperty(this.value, __OID_PROP, __DEF_OID_PROP);
         }
 
-        this._uid = uid;
+        this.__uid = uid;
       },
 
       /**
@@ -84,15 +81,15 @@ define([
        * @type {string}
        * @readonly
        */
-      get key() {
-        return this._uid;
+      get $key() {
+        return this.__uid;
       },
 
       // region serialization
       /** @inheritDoc */
       _toJSONValue: function(keyArgs) {
-        var code = String(this._value);
-        if(code.indexOf(NATIVE_CODE) > 0) {
+        var code = String(this.value);
+        if(code.indexOf(__NATIVE_CODE) > 0) {
           logger.warn(bundle.structured.errors.json.cannotSerializeNativeFunction);
 
           // Indicate serialization failure.
@@ -103,15 +100,15 @@ define([
       },
       // endregion
 
-      type: /** @lends pentaho.type.Function.Type# */{
+      $type: /** @lends pentaho.type.Function.Type# */{
         id: module.id,
         alias: "function",
         cast: F.as
       }
     }).implement(/** @lends pentaho.type.Function# */{
-      type: bundle.structured["function"] // eslint-disable-line dot-notation
+      $type: bundle.structured["function"] // eslint-disable-line dot-notation
     });
 
     return PenFunction;
-  };
+  }];
 });

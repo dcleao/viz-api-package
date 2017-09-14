@@ -15,33 +15,30 @@
  */
 define([
   "module",
-  "./categoricalContinuousAbstract",
-  "pentaho/i18n!./i18n/model",
-  "./mixins/settingsMultiChartType"
-], function(module, baseModelFactory, bundle, settingsMultiChartType) {
+  "pentaho/i18n!./i18n/model"
+], function(module, bundle) {
 
   "use strict";
 
-  return function(context) {
+  return [
+    "./categoricalContinuousAbstract",
+    "./mixins/multiCharted",
+    function(BaseModel, MultiChartedModel) {
 
-    var BaseModel = context.get(baseModelFactory);
-
-    return BaseModel.extend({
-      type: {
-        id: module.id,
-        isAbstract: true,
-        props: [
-          {
-            name: "rows", // VISUAL_ROLE
-            type: {
+      return BaseModel.extend({
+        $type: {
+          id: module.id,
+          mixins: [MultiChartedModel],
+          isAbstract: true,
+          props: [
+            {
+              name: "rows", // VISUAL_ROLE
               levels: ["ordinal"]
             }
-          }
-        ]
-      }
-    })
-    .implement({type: settingsMultiChartType})
-    .implement({type: bundle.structured.settingsMultiChart})
-    .implement({type: bundle.structured.barAbstract});
-  };
+          ]
+        }
+      })
+      .implement({$type: bundle.structured.barAbstract});
+    }
+  ];
 });
