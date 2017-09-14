@@ -1,0 +1,10 @@
+{
+  "name": "@pentaho/viz-api",
+  "version": "3.0.0",
+  "description": "Pentaho JavaScript APIs dev package",
+  "author": "@pentaho/millenniumfalcon",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "requirejs": "^2.3.3"
+  }
+}
